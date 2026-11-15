@@ -1,0 +1,6 @@
+{
+  "name": "KIGUMI — 3D物理ジェンガ・スタジオ",
+  "description": "スマホ片手でも遊べる、自然な木目と本格剛体物理を備えた3Dジェンガゲーム。ソロ練習・交互プレイ・引き抜き安定度ガイド・崩落スローモーション演出を搭載。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
