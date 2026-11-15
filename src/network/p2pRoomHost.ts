@@ -38,6 +38,7 @@ function clamp(v: number, min: number, max: number): number {
 
 export interface P2PRoomHostCallbacks {
   onSendToPlayer: (playerId: string, msg: ServerWsMessage) => void;
+  onBroadcastRemote?: (msg: ServerWsMessage) => void;
   onLocalEvent: (msg: ServerWsMessage) => void;
 }
 
@@ -937,13 +938,17 @@ export class P2PRoomHost {
   }
 
   private sendToAll(msg: ServerWsMessage): void {
+    const hostPlayer = this.players.find((p) => p.id === this.hostId);
+    if (hostPlayer?.connected) {
+      this.callbacks.onLocalEvent(msg);
+    }
+    if (this.callbacks.onBroadcastRemote) {
+      this.callbacks.onBroadcastRemote(msg);
+      return;
+    }
     for (const p of this.players) {
-      if (!p.connected) continue;
-      if (p.id === this.hostId) {
-        this.callbacks.onLocalEvent(msg);
-      } else {
-        this.callbacks.onSendToPlayer(p.id, msg);
-      }
+      if (!p.connected || p.id === this.hostId) continue;
+      this.callbacks.onSendToPlayer(p.id, msg);
     }
   }
 
